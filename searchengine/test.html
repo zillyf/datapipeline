@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Dynamic Styles</title>
+        <style>
+            ul { display: none; }
+        </style>
+    </head>
+
+    <body>
+        <h1 id="firstHeader">Welcome to Dynamic HTML</h1>
+
+        <p><a id="clickableLink" href="#">Dynamic styles are a key feature of DHTML.</a></p>
+
+        <ul id="unorderedList">
+            <li>Change the color, size, and typeface of text</li>
+            <li>Show and hide text</li>
+            <li>And much, much more</li>
+        </ul>
+
+        <p>We've only just begun!</p>
+
+        <script>
+            function showMe() {
+                document.getElementById("firstHeader").style.color = "#990000";
+                document.getElementById("unorderedList").style.display = "block";
+            }
+
+            document.getElementById("clickableLink").addEventListener("click", function (e) {
+                e.preventDefault();
+                showMe();
+            });
+        </script>
+    </body>
+</html>
