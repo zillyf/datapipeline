@@ -3,6 +3,7 @@ from typing import Optional
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 
+import os
 import json
 app = FastAPI()
 
@@ -19,6 +20,9 @@ def getHTMLFooter():
 
 @app.get("/", response_class=HTMLResponse)
 def read_root():
+
+    curDir = os.getcwd()
+    print(curDir)
     returnString = getHTMLHeader()+'test'+getHTMLFooter()
     f = open('/home/zilly/datapipeline/searchengine/index.html', 'r')
     returnString = f.read()
@@ -42,4 +46,4 @@ def read_item(item_id: int, q: Optional[str] = None):
 
 import uvicorn
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8001)
