@@ -7,6 +7,9 @@ import os
 import json
 app = FastAPI()
 
+curDir = os.getcwd()
+appDir = curDir
+
 def getHTMLHeader(title='Hello World'):
     returnString = ''
     returnString=returnString+'<html><title>'+title+'</title><body>'
@@ -21,10 +24,8 @@ def getHTMLFooter():
 @app.get("/", response_class=HTMLResponse)
 def read_root():
 
-    curDir = os.getcwd()
-    print(curDir)
     returnString = getHTMLHeader()+'test'+getHTMLFooter()
-    f = open('/home/zilly/datapipeline/searchengine/index.html', 'r')
+    f = open( appDir+'/index.html', 'r')
     returnString = f.read()
     return returnString
     #print(returnString)
@@ -32,7 +33,7 @@ def read_root():
 
 @app.get("/books")
 def read_books():
-    f = open('/home/zilly/datapipeline/searchengine/books.json', 'r')
+    f = open( appDir + '/books.json', 'r')
     f2 = json.load(f)
     #    returnString = f.read()
     returnString = f2
