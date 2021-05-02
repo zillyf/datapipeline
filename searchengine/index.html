@@ -1,5 +1,5 @@
 <html>
-    <title>Web Search</title>
+    <title>Data Management : Image Browser</title>
     <body>
         <h1>Web Search</h1>
         <h2>Datasets</h2>
@@ -9,31 +9,15 @@
             <button type="submit">Search</button>
         </form>
         <input type="button" onclick="LoadDoc()" value="Create Table From JSON" />
+        <input type="button" onclick="myPage--; LoadDoc()" value="<-- Previous Page" />
+        <input type="button" onclick="myPage++; LoadDoc()" value="Next Page -->" />
         <p id="showData"></p>
     
     </body>
     <script>
+        var myPage = 1;
         function CreateTableFromJSON(myBooks) {
-            var myBooks2 = [
-                {
-                    "Book ID": "1",
-                    "Book Name": "Computer Architecture",
-                    "Category": "Computers",
-                    "Price": "125.60"
-                },
-                {
-                    "Book ID": "2",
-                    "Book Name": "Asp.Net 4 Blue Book",
-                    "Category": "Programming",
-                    "Price": "56.00"
-                },
-                {
-                    "Book ID": "3",
-                    "Book Name": "Popular Science",
-                    "Category": "Science",
-                    "Price": "210.40"
-                }
-            ]
+            
             // EXTRACT VALUE FOR HTML HEADER. 
             // ('Book ID', 'Book Name', 'Category' and 'Price')
             var col = [];
@@ -77,26 +61,6 @@
         }
         function LoadDoc() {
             var xhttp = new XMLHttpRequest();
-            var myBooks2 = [
-                {
-                    "Book ID": "1",
-                    "Book Name": "Computer Architecture",
-                    "Category": "Computers",
-                    "Price": "125.60"
-                },
-                {
-                    "Book ID": "2",
-                    "Book Name": "Asp.Net 4 Blue Book",
-                    "Category": "Programming",
-                    "Price": "56.00"
-                },
-                {
-                    "Book ID": "3",
-                    "Book Name": "Popular Science",
-                    "Category": "Science",
-                    "Price": "210.40"
-                }
-            ]
  
             xhttp.onreadystatechange = function() {
                 var divContainer = document.getElementById("showData");
@@ -109,7 +73,7 @@
 
                 }
             };           
-            xhttp.open('GET', '/books');
+            xhttp.open('GET', '/imagelistpage/'+myPage);
             xhttp.send();
         
         }
