@@ -10,12 +10,22 @@ import json
 app = FastAPI()
 
 curDir = os.getcwd()
-appDir = curDir
+appDir = curDir +'/app'
 blobDir = ''
 
-client = MongoClient('localhost:27017')
-collection = client.images.images
+dbServer=os.getenv('MONGO_DB_SERVER','localhost:27017')
+dbUser = os.getenv('MONGO_USERNAME','searchengine')
+dbPW = os.getenv('MONGO_PASSWORD','searchengine')
 
+searchPort = os.getenv('SEARCHENGINE_PORT','8000')
+
+client = MongoClient(dbServer, username=dbUser, password=dbPW)
+
+print('Mongo DB Connection -----')
+print('server:'+dbServer)
+print('user:'+dbUser)
+
+collection = client.images.images
 def getHTMLHeader(title='Hello World'):
     returnString = ''
     returnString=returnString+'<html><title>'+title+'</title><body>'
@@ -87,4 +97,4 @@ def read_item(item_id: int, q: Optional[str] = None):
 
 import uvicorn
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    uvicorn.run(app, host="0.0.0.0", port=int(searchPort))
