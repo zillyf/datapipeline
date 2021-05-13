@@ -9,6 +9,15 @@ services:
       - 27017:27017
     volumes:
       - mongodb_data_container:/data/db
-
+  searchengine:
+    image: zillyf/searchengine:v1.0.9
+    environment:
+      MONGO_USERNAME: root
+      MONGO_PASSWORD: rootpassword
+      MONGO_DB_SERVER: mongodb_container:27017
+      SEARCHENGINE_PORT: 8000
+    ports:
+      - 8000:8000
+    
 volumes:
   mongodb_data_container:
