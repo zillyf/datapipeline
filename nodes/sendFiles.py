@@ -60,4 +60,3 @@ def kafkaSendFiles(directories, files, basicmetadata, df_metadata, kafkaProducer
         print('Sending ', relPath)
         #kafkaTopic='topic_test'
         kafkaProducer.send(kafkaTopic, value=newEntry)
-        #sleep(0.5)
