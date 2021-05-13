@@ -7,3 +7,6 @@ docker-compose -f docker-compose-kafka.yml up -d
 cd ../..
 
 docker-compose -f docker-compose.yml up -d
+
+#sudo docker run zillyf/ros-data-science:v1.0.0 -p8888:8888
+#sudo docker run  -p8001:8001 zillyf/searchengine:v1.0.0
