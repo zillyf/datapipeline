@@ -1,5 +1,5 @@
 
-def kafkaSendFiles(directories, files, basicmetadata, df_metadata, kafkaProducer):
+def kafkaSendFiles(directories, files, basicmetadata, df_metadata, kafkaProducer, kafkaTopic):
 
     import hashlib   
     from PIL import Image
@@ -58,5 +58,6 @@ def kafkaSendFiles(directories, files, basicmetadata, df_metadata, kafkaProducer
         if 'az' in df_metadata:newEntry["acceleration_alt"]=df_metadata['az'][j]
             
         print('Sending ', relPath)
-        kafkaProducer.send('topic_test', value=newEntry)
+        #kafkaTopic='topic_test'
+        kafkaProducer.send(kafkaTopic, value=newEntry)
         #sleep(0.5)
