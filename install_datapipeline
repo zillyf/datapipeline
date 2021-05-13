@@ -1,0 +1,23 @@
+#!/bin/bash
+
+
+sudo apt-get update
+
+# Install Docker
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+docker pull mongo
+pip install pymongo
+pip install kafka-python
+cd kafka
+git clone https://github.com/wurstmeister/kafka-docker.git 
