@@ -10,7 +10,7 @@ services:
     volumes:
       - mongodb_data_container:/data/db
   searchengine:
-    image: zillyf/searchengine:v1.0.9
+    image: zillyf/searchengine:v1.1.0
     environment:
       MONGO_USERNAME: root
       MONGO_PASSWORD: rootpassword
@@ -18,6 +18,14 @@ services:
       SEARCHENGINE_PORT: 8000
     ports:
       - 8000:8000
-    
+  datapipenodes:
+    image: zillyf/datapipenodes:v1.0.5
+    environment:
+      MONGO_USERNAME: root
+      MONGO_PASSWORD: rootpassword
+      MONGO_DB_SERVER: mongodb_container:27017
+      KAFKA_SERVER: 172.25.61.29:9092
+      KAFKA_TOPIC_SENDFILES: topic_test
+
 volumes:
   mongodb_data_container:

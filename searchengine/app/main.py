@@ -62,7 +62,7 @@ def read_imagelistpage(page_id: int):
     pagesize=50
     skipoffset=(page_id-1)*pagesize
     data = []
-    for image in collection.find({"datasetprovider":"Cityscapes"}, {'datasetprovider':1, 'filenameHash':1, 'datasetname':1, 'imageFilename':1, '_id':0}).skip(skipoffset).limit(pagesize):
+    for image in collection.find({}, {'datasetprovider':1, 'filenameHash':1, 'datasetname':1, 'imageFilename':1, '_id':0}).skip(skipoffset).limit(pagesize):
         data.append(image)
 
     #f = open( appDir + '/books.json', 'r')

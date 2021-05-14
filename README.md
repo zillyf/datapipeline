@@ -2,9 +2,9 @@
 
 modules of the data pipeline
 
-- searchengine
+- searchengine: 
   - FastAPI
 - database
   - mongodb
 - orchestration: Docker Compose
-- 
+- message broker: Kafka
