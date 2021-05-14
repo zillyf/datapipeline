@@ -8,24 +8,31 @@ from PIL import Image
 import hashlib
 producer = KafkaProducer(
     bootstrap_servers=['localhost:9092'],
-    value_serializer=lambda x: dumps(x).encode('utf-8')
+    value_serializer=lambda x: dumps(x).encode('utf-8'),
+    security_protocol="PLAINTEXT",
+    sasl_mechanism="SCRAM-SHA-256"
 )
 
 #cityscape_dir= 'C:/Users/zilly/Downloads/leftImg8bit_trainvaltest/leftImg8bit'
 #cityscape_dir= 'C:/Users/zilly/Downloads/leftImg8bit_trainvaltest/leftImg8bit/test/berlin'
 
 directories={}
-directories["ingest_dir"]='z:/kitti'
-directories["blobstorage_dir"]='z:/blobstorage'
-directories["thumbnail_dir"]=directories["blobstorage_dir"]+'/thumbnails'
+directories["ingest_dir"]=os.getenv('KITTY_BASEDIR','~/kitty')
+directories["blobstorage_dir"]=os.getenv('DATAPIPE_BLOBSTORAGEDIR','/home/zilly/blobstorage')
+directories["thumbnail_dir"]=os.getenv('DATAPIPE_THUMBNAILDIR','/home/zilly/blobstoragethumbnail')
 
 ingest_dir = directories["ingest_dir"]
-dataset_dir = ingest_dir+'/'+'2011_09_26_drive_0005_sync/2011_09_26/2011_09_26_drive_0005_sync/image_02/data/'
+basedirectory = os.getenv('KITTY_BASEDIR','~/')
+dataset_dir = ingest_dir+'/'+'/image_02/data/'
+
+kafkaTopic = os.getenv('KAFKA_TOPIC_SENDFILES','topic_test')
+
+#blobstorage_dir='z:/blobstorage'
+#thumbnail_dir='z:/blobstorage/thumbnails'
 
 ################# KITTI RELATED START ####################
 import pandas as pd
 
-basedirectory = 'z:/kitti/2011_09_26_drive_0005_sync/2011_09_26/2011_09_26_drive_0005_sync/'
 
 
 columnnames = ['lat','lon','alt','roll','pitch','yaw', 'vn','ve','vf','vl','vu','ax','ay','az','af','al','au',
@@ -70,11 +77,9 @@ basicmetadata={
     'datasetcontainer': '2011_09_26_drive_0005_sync.zip',
 }
 
-blobstorage_dir='z:/blobstorage'
-thumbnail_dir='z:/blobstorage/thumbnails'
 
 import glob
 files = glob.glob(dataset_dir + '/**/*.png', recursive=True)
 
 #sendFiles(files, basicmetadata, df_merged)
-kafkaSendFiles(directories, files, basicmetadata, df_merged, producer)
+kafkaSendFiles(directories, files, basicmetadata, df_merged, producer, kafkaTopic)

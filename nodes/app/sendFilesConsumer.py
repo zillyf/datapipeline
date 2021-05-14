@@ -2,21 +2,49 @@
 from kafka import KafkaConsumer
 from json import loads
 from time import sleep
+import os
 
 # pip3 install pymongo
 from pymongo import MongoClient
-client = MongoClient('localhost:27017')
+
+# wait for startup of Kafka
+print('wait for startup of Kafka')
+sleep(15)
+
+dbServer=os.getenv('MONGO_DB_SERVER','localhost:27017')
+dbUser = os.getenv('MONGO_USERNAME','searchengine')
+dbPW = os.getenv('MONGO_PASSWORD','searchengine')
+
+kafkaServer = os.getenv('KAFKA_SERVER','localhost:9092')
+
+client = MongoClient(dbServer, username=dbUser, password=dbPW)
+
+print('Mongo DB Connection -----')
+print('server:'+dbServer)
+print('user:'+dbUser)
+
 collection = client.images.images
+
+kafkaTopic = os.getenv('KAFKA_TOPIC_SENDFILES','topic_test')
+
+print('Kafka Connection -----')
+print('server:'+kafkaServer)
+print('topic:'+kafkaTopic)
 
 
 consumer = KafkaConsumer(
-    'topic_test',
-    bootstrap_servers=['localhost:9092'],
+    kafkaTopic,
+    bootstrap_servers=[kafkaServer],
     auto_offset_reset='earliest',
     enable_auto_commit=True,
     group_id='my-group-id',
+    security_protocol="PLAINTEXT",
+    sasl_mechanism="SCRAM-SHA-256",
     value_deserializer=lambda x: loads(x.decode('utf-8'))
 )
+
+print('kafka init completed')
+
 for event in consumer:
     event_data = event.value
     # Do whatever you want

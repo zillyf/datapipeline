@@ -1,4 +1,3 @@
-
 def kafkaSendFiles(directories, files, basicmetadata, df_metadata, kafkaProducer, kafkaTopic):
 
     import hashlib   
@@ -28,6 +27,8 @@ def kafkaSendFiles(directories, files, basicmetadata, df_metadata, kafkaProducer
         max_w=400
         factor=max_w/width
         newsize=( int(width*factor), int(height*factor))
+    # Write to Blob Storage
+        print('Save image into Blob Storage:'+filenameHash)
         image.save(blobstorage_dir+'/'+filenameHash+'.png')
         imageThumb=image.resize(newsize)
         imageThumb.save(thumbnail_dir+'/'+filenameHash+'.jpg')
