@@ -7,7 +7,7 @@ from kafka import KafkaProducer
 from PIL import Image
 
 consumer = KafkaConsumer(
-    'topic_test',
+    'send_file',
     bootstrap_servers=['localhost:9092'],
     auto_offset_reset='earliest',
     enable_auto_commit=True,

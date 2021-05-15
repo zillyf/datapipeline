@@ -18,6 +18,8 @@ services:
       SEARCHENGINE_PORT: 8000
     ports:
       - 8000:8000
+    volumes:
+      - imagethumbnails:/data/imagethumbnails
   zookeeper:
     image: wurstmeister/zookeeper:3.4.6
     ports:
@@ -34,17 +36,42 @@ services:
       KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "topic_test:1:1"
+      KAFKA_CREATE_TOPICS: "send_file:1:1,send_kitti_dataset_request:1:1,topic_test:1:1"
+      KAFKA_MESSAGE_MAX_BYTES: 10000000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-  datapipenodes:
-    image: zillyf/datapipenodes:v1.0.7
+  datapipenodes_send_file:
+    image: zillyf/datapipenodes:v1.2.1
+    command: ["python3", "app/sendFilesConsumer.py"]
     environment:
       MONGO_USERNAME: root
       MONGO_PASSWORD: rootpassword
       MONGO_DB_SERVER: mongodb_container:27017
-      KAFKA_SERVER: kafka:9092
-      KAFKA_TOPIC_SENDFILES: topic_test
-    
+      KAFKA_SERVER: kafka:9093
+      KAFKA_TOPIC_SENDFILES: send_file
+      PYTHONUNBUFFERED: 1
+    volumes:
+      - imagethumbnails:/data/imagethumbnails
+      - imageblobstorage:/data/imageblobstorage
+      - downloads:/data/downloads
+      - extractedfiles:/data/extractedfiles
+  datapipenodes_kitti_data_request:
+    image: zillyf/datapipenodes:v1.2.1
+    command: ["python3", "app/sendKittiDatasetRequest.py"]    
+    environment:
+      KAFKA_SERVER: kafka:9093
+      KAFKA_TOPIC_SENDFILES: send_file
+      KAFKA_TOPIC_KITTIDATASETREQUEST: send_kitti_dataset_request
+      PYTHONUNBUFFERED: 1
+    volumes:
+      - imagethumbnails:/data/imagethumbnails
+      - imageblobstorage:/data/imageblobstorage
+      - downloads:/data/downloads
+      - extractedfiles:/data/extractedfiles
+                
 volumes:
   mongodb_data_container:
+  imagethumbnails:
+  imageblobstorage:
+  downloads:
+  extractedfiles:

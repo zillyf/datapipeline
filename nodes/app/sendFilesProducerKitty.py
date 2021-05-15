@@ -26,15 +26,15 @@ producer = KafkaProducer(
 #cityscape_dir= 'C:/Users/zilly/Downloads/leftImg8bit_trainvaltest/leftImg8bit/test/berlin'
 
 directories={}
-directories["ingest_dir"]=os.getenv('KITTY_BASEDIR','~/kitty')
+directories["ingest_dir"]=os.getenv('KITTI_BASEDIR','~/kitti')
 directories["blobstorage_dir"]=os.getenv('DATAPIPE_BLOBSTORAGEDIR','/home/zilly/blobstorage')
 directories["thumbnail_dir"]=os.getenv('DATAPIPE_THUMBNAILDIR','/home/zilly/blobstoragethumbnail')
 
 ingest_dir = directories["ingest_dir"]
-basedirectory = os.getenv('KITTY_BASEDIR','~/')
+basedirectory = os.getenv('KITTI_BASEDIR','~/')
 dataset_dir = ingest_dir+'/'+'/image_02/data/'
 
-kafkaTopic = os.getenv('KAFKA_TOPIC_SENDFILES','topic_test')
+kafkaTopic = os.getenv('KAFKA_TOPIC_SENDFILES','send_file')
 
 print ("kafkaTopic: "+kafkaTopic)
 

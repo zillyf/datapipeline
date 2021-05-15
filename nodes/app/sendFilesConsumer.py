@@ -26,7 +26,7 @@ sys.stdout.write('user:'+dbUser+'\n')
 
 collection = client.images.images
 
-kafkaTopic = os.getenv('KAFKA_TOPIC_SENDFILES','topic_test')
+kafkaTopic = os.getenv('KAFKA_TOPIC_SENDFILES','send_file')
 
 print('Kafka Connection -----')
 print('server:'+kafkaServer)
@@ -60,6 +60,7 @@ for event in consumer:
     # Do whatever you want
     print(event_data)
     #collection.insert_one(  event_data )
-    key={'filenameHash': event_data['filenameHash'] }
-    collection.update(key, event_data, upsert=True);
+    if 'filenameHash' in event_data:
+        key={'filenameHash': event_data['filenameHash'] }
+        collection.update(key, event_data, upsert=True);
     sleep(0.1)
