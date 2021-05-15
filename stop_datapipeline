@@ -2,7 +2,7 @@
 
 docker-compose -f docker-compose.yml down
 
-cd kafka/kafka-docker
-docker-compose -f docker-compose-kafka.yml down
-cd ../..
+#cd kafka/kafka-docker
+#docker-compose -f docker-compose-kafka.yml down
+#cd ../..
 

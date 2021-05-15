@@ -3,12 +3,13 @@ from kafka import KafkaConsumer
 from json import loads
 from time import sleep
 import os
+import sys
 
 # pip3 install pymongo
 from pymongo import MongoClient
 
 # wait for startup of Kafka
-print('wait for startup of Kafka')
+sys.stdout.write('wait for startup of Kafka\n')
 sleep(15)
 
 dbServer=os.getenv('MONGO_DB_SERVER','localhost:27017')
@@ -19,9 +20,9 @@ kafkaServer = os.getenv('KAFKA_SERVER','localhost:9092')
 
 client = MongoClient(dbServer, username=dbUser, password=dbPW)
 
-print('Mongo DB Connection -----')
-print('server:'+dbServer)
-print('user:'+dbUser)
+sys.stdout.write('Mongo DB Connection -----\n')
+sys.stdout.write('server:'+dbServer+'\n')
+sys.stdout.write('user:'+dbUser+'\n')
 
 collection = client.images.images
 
@@ -38,10 +39,19 @@ consumer = KafkaConsumer(
     auto_offset_reset='earliest',
     enable_auto_commit=True,
     group_id='my-group-id',
-    security_protocol="PLAINTEXT",
-    sasl_mechanism="SCRAM-SHA-256",
     value_deserializer=lambda x: loads(x.decode('utf-8'))
 )
+
+#consumer = KafkaConsumer(
+#    kafkaTopic,
+#    bootstrap_servers=[kafkaServer],
+#    auto_offset_reset='earliest',
+#    enable_auto_commit=True,
+#    group_id='my-group-id',
+#    security_protocol="PLAINTEXT",
+#    sasl_mechanism="SCRAM-SHA-256",
+#    value_deserializer=lambda x: loads(x.decode('utf-8'))
+#)
 
 print('kafka init completed')
 

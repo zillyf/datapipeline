@@ -6,12 +6,21 @@ from json import dumps
 from kafka import KafkaProducer
 from PIL import Image
 import hashlib
+
+kafkaServer = os.getenv('KAFKA_SERVER','localhost:9092')
+
 producer = KafkaProducer(
-    bootstrap_servers=['localhost:9092'],
-    value_serializer=lambda x: dumps(x).encode('utf-8'),
-    security_protocol="PLAINTEXT",
-    sasl_mechanism="SCRAM-SHA-256"
+    bootstrap_servers=[kafkaServer],
+    value_serializer=lambda x: dumps(x).encode('utf-8')
 )
+
+#producer = KafkaProducer(
+#    bootstrap_servers=[kafkaServer],
+#    value_serializer=lambda x: dumps(x).encode('utf-8'),
+#    security_protocol="PLAINTEXT",
+#    sasl_mechanism="SCRAM-SHA-256"
+#)
+
 
 #cityscape_dir= 'C:/Users/zilly/Downloads/leftImg8bit_trainvaltest/leftImg8bit'
 #cityscape_dir= 'C:/Users/zilly/Downloads/leftImg8bit_trainvaltest/leftImg8bit/test/berlin'
@@ -26,6 +35,8 @@ basedirectory = os.getenv('KITTY_BASEDIR','~/')
 dataset_dir = ingest_dir+'/'+'/image_02/data/'
 
 kafkaTopic = os.getenv('KAFKA_TOPIC_SENDFILES','topic_test')
+
+print ("kafkaTopic: "+kafkaTopic)
 
 #blobstorage_dir='z:/blobstorage'
 #thumbnail_dir='z:/blobstorage/thumbnails'

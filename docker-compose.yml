@@ -18,14 +18,33 @@ services:
       SEARCHENGINE_PORT: 8000
     ports:
       - 8000:8000
+  zookeeper:
+    image: wurstmeister/zookeeper:3.4.6
+    ports:
+     - "2181:2181"
+  kafka:
+    image: zillyf/kafka:v1
+    ports:
+      - "9092:9092"
+    expose:
+      - "9093"
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "topic_test:1:1"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   datapipenodes:
-    image: zillyf/datapipenodes:v1.0.5
+    image: zillyf/datapipenodes:v1.0.7
     environment:
       MONGO_USERNAME: root
       MONGO_PASSWORD: rootpassword
       MONGO_DB_SERVER: mongodb_container:27017
-      KAFKA_SERVER: 172.25.61.29:9092
+      KAFKA_SERVER: kafka:9092
       KAFKA_TOPIC_SENDFILES: topic_test
-
+    
 volumes:
   mongodb_data_container:

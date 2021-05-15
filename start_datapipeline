@@ -2,9 +2,9 @@
 
 #docker run -d -p 27017-27019:27017-27019 --name mongodb mongo
 
-cd kafka/kafka-docker
-docker-compose -f docker-compose-kafka.yml up -d
-cd ../..
+#cd kafka/kafka-docker
+#docker-compose -f docker-compose-kafka.yml up -d
+#cd ../..
 
 #docker-compose -f kafka/kafka-docker/docker-compose-kafka.yml up -d
 #docker-compose -f kafka/kafka-docker/docker-compose.yml up -d
