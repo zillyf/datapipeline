@@ -10,7 +10,7 @@ services:
     volumes:
       - mongodb_data_container:/data/db
   searchengine:
-    image: zillyf/searchengine:v1.2.0
+    image: zillyf/searchengine:v1.2.6
     depends_on: 
       - mongodb_container
     environment:

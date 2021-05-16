@@ -1,17 +1,25 @@
-<html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Data Management : Image Browser</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="static/w3.css">
+        <style>
+            html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+        </style>
+    </head>
     <body>
         <h1>Web Search</h1>
         <h2>Datasets</h2>
         <h2>Image Search</h2>
-        <form method="POST" >
+        <form method="POST">
             <input id="string">
-            <button type="submit">Search</button>
+            <button type="submit" class="w3-button w3-dark-grey">Search</button>
         </form>
-        <input type="button" onclick="LoadDoc()" value="Create Table From JSON" />
-        <input type="button" onclick="myPage--; LoadDoc()" value="<-- Previous Page" />
-        <input type="button" onclick="myPage++; LoadDoc()" value="Next Page -->" />
+        <input class="w3-button w3-dark-grey" type="button" onclick="LoadDoc()" value="Browse Images ...">
+        <input class="w3-button w3-dark-grey" type="button" onclick="myPage--; LoadDoc()" value="&larr; Previous Page">
+        <input class="w3-button w3-dark-grey" type="button" onclick="myPage++; LoadDoc()" value="Next Page &rarr;">
         <p id="showData"></p>
+        <input class="w3-button w3-dark-grey" type="button" onclick="myPage--; LoadDoc()" value="&larr; Previous Page">
+        <input class="w3-button w3-dark-grey" type="button" onclick="myPage++; LoadDoc()" value="Next Page &rarr;">
     
     </body>
     <script>
@@ -31,6 +39,9 @@
     
             // CREATE DYNAMIC TABLE.
             var table = document.createElement("table");
+            table.classList.add('w3-table'); table.classList.add('w3-striped'); table.classList.add('w3-bordered'); table.classList.add('w3-border'); table.classList.add('w3-hoverable'); table.classList.add('w3-white');
+//            table.classList.appendChild('w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white');
+//            table.style='w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white'
     
             // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
     
@@ -90,6 +101,21 @@
             xhttp.send();
         
         }
-
+/*
+        document.addEventListener('keydown', (event) => {
+            var name = event.key;
+            var code = event.code;
+            if (code === '37') {
+                // Left Arrow Key
+                myPage--; LoadDoc();
+                return;
+            }
+            if (code === '39') {
+                // Right Arrow Key
+                myPage++; LoadDoc();
+                return;
+            }
+        }
+  */
     </script>
 </html>

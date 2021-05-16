@@ -4,20 +4,26 @@ from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.responses import FileResponse
 
+from fastapi.staticfiles import StaticFiles
+
 from pymongo import MongoClient
 
 import os
 import json
 app = FastAPI()
 
+
 curDir = os.getcwd()
 appDir = curDir +'/app'
 blobDir = ''
 imgageThumbnailDir = '/data/imagethumbnails/'
 
+app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+
 dbServer=os.getenv('MONGO_DB_SERVER','localhost:27017')
-dbUser = os.getenv('MONGO_USERNAME','searchengine')
-dbPW = os.getenv('MONGO_PASSWORD','searchengine')
+dbUser = os.getenv('MONGO_USERNAME','root')
+dbPW = os.getenv('MONGO_PASSWORD','rootpassword')
 
 searchPort = os.getenv('SEARCHENGINE_PORT','8000')
 
