@@ -1,10 +1,16 @@
-# datapipeline
+# The "Wirtemberg" Data Pipeline
 
-modules of the data pipeline
+## Modules of the Data Pipeline and Basic Architecture
 
-- searchengine: 
-  - FastAPI
-- database
-  - mongodb
-- orchestration: Docker Compose
-- message broker: Kafka
+### Search Engine
+Web-based user interface.
+Backeend  on *FastAPI*
+
+### MongoDB
+The Data Pipeline uses *mongoDB* as database to store metadata
+
+### Kafka
+Message Broker for the communication between the modules
+
+### Docker Compose
+Each module is realized as Docker containers. For orchestration Docker Compose is used

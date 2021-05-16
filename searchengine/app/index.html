@@ -35,10 +35,18 @@
             // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
     
             var tr = table.insertRow(-1);                   // TABLE ROW.
+
+            var filenameHashIndex=-1;
+            filenameHashIndex=col.indexOf('filenameHash');
     
             for (var i = 0; i < col.length; i++) {
                 var th = document.createElement("th");      // TABLE HEADER.
                 th.innerHTML = col[i];
+                tr.appendChild(th);
+            }
+            if (filenameHashIndex>0 ) {
+                var th = document.createElement("th");      // TABLE HEADER.
+                th.innerHTML = 'Preview Image';
                 tr.appendChild(th);
             }
     
@@ -51,6 +59,11 @@
                     var tabCell = tr.insertCell(-1);
                     tabCell.innerHTML = myBooks[i][col[j]];
                 }
+                if (filenameHashIndex>0 ) {
+                    var tabCell = tr.insertCell(-1);
+                    tabCell.innerHTML = '<img src=/imagethumbnail/'+myBooks[i][col[filenameHashIndex]]+'>';
+                }
+
             }
             // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
             var divContainer = document.getElementById("showData");

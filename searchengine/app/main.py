@@ -2,6 +2,7 @@ from typing import Optional
 
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse
 
 from pymongo import MongoClient
 
@@ -12,6 +13,7 @@ app = FastAPI()
 curDir = os.getcwd()
 appDir = curDir +'/app'
 blobDir = ''
+imgageThumbnailDir = '/data/imagethumbnails/'
 
 dbServer=os.getenv('MONGO_DB_SERVER','localhost:27017')
 dbUser = os.getenv('MONGO_USERNAME','searchengine')
@@ -62,7 +64,7 @@ def read_imagelistpage(page_id: int):
     pagesize=50
     skipoffset=(page_id-1)*pagesize
     data = []
-    for image in collection.find({}, {'datasetprovider':1, 'filenameHash':1, 'datasetname':1, 'imageFilename':1, '_id':0}).skip(skipoffset).limit(pagesize):
+    for image in collection.find({}, {'datasetprovider':1, 'filenameHash':1, 'datasetname':1, 'imageFilename':1, 'timestamp':1, '_id':0}).skip(skipoffset).limit(pagesize):
         data.append(image)
 
     #f = open( appDir + '/books.json', 'r')
@@ -83,13 +85,12 @@ def read_books():
     print(returnString);
     return returnString
 
-@app.get("/image")
-def read_image():
-    f = open( appDir + '/books.json', 'r')
-    data = f.read()
-    return Response(content=data, media_type="image/png")
-
-
+@app.get("/imagethumbnail/{image_id}")
+def read_image(image_id: str):
+    filename=imgageThumbnailDir + image_id+'.jpg'
+    # f = open( imgageThumbnailDir + image_id+'.jpg', 'r')
+    # data = f.read()
+    return FileResponse(filename)
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Optional[str] = None):

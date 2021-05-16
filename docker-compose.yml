@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.3'
 services:
   mongodb_container:
     image: mongo:latest
@@ -10,7 +10,9 @@ services:
     volumes:
       - mongodb_data_container:/data/db
   searchengine:
-    image: zillyf/searchengine:v1.1.0
+    image: zillyf/searchengine:v1.2.0
+    depends_on: 
+      - mongodb_container
     environment:
       MONGO_USERNAME: root
       MONGO_PASSWORD: rootpassword
@@ -41,8 +43,11 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   datapipenodes_send_file:
-    image: zillyf/datapipenodes:v1.2.1
+    image: zillyf/datapipenodes:v1.2.2
     command: ["python3", "app/sendFilesConsumer.py"]
+    depends_on: 
+      - kafka
+      - mongodb_container
     environment:
       MONGO_USERNAME: root
       MONGO_PASSWORD: rootpassword
@@ -56,8 +61,10 @@ services:
       - downloads:/data/downloads
       - extractedfiles:/data/extractedfiles
   datapipenodes_kitti_data_request:
-    image: zillyf/datapipenodes:v1.2.1
+    image: zillyf/datapipenodes:v1.2.2
     command: ["python3", "app/sendKittiDatasetRequest.py"]    
+    depends_on: 
+      - kafka
     environment:
       KAFKA_SERVER: kafka:9093
       KAFKA_TOPIC_SENDFILES: send_file

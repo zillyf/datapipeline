@@ -57,6 +57,7 @@ def kafkaSendFiles(directories, files, basicmetadata, df_metadata, kafkaProducer
         if 'ax' in df_metadata:newEntry["acceleration_lon"]=df_metadata['ax'][j]
         if 'ay' in df_metadata:newEntry["acceleration_lat"]=df_metadata['ay'][j]
         if 'az' in df_metadata:newEntry["acceleration_alt"]=df_metadata['az'][j]
+        if 'ts' in df_metadata:newEntry["timestamp"]=df_metadata['ts'][j]        
             
         print('Sending ', relPath)
         #kafkaTopic='topic_test'
