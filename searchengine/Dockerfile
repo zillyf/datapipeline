@@ -1,6 +1,6 @@
 FROM python:3.7
 
-RUN pip install fastapi uvicorn pymongo aiofiles
+RUN pip install fastapi uvicorn pymongo aiofiles kafka-python
 
 EXPOSE 8000
 
