@@ -1,5 +1,16 @@
 # The "Wirtemberg" Data Pipeline
 
+
+
+## Installation
+
+git clone https://github.com/zillyf/datapipeline.git
+cd datapipeline
+sudo ./start_datapipeline
+
+Open http://localhost:8000
+
+
 ## Modules of the Data Pipeline and Basic Architecture
 
 ### Search Engine
