@@ -47,7 +47,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   datapipenodes_send_file:
-    image: zillyf/datapipenodes:v1.2.2
+    image: zillyf/datapipenodes:v1.2.3
     command: ["python3", "app/sendFilesConsumer.py"]
     depends_on: 
       - kafka
@@ -65,7 +65,7 @@ services:
       - downloads:/data/downloads
       - extractedfiles:/data/extractedfiles
   datapipenodes_kitti_data_request:
-    image: zillyf/datapipenodes:v1.2.2
+    image: zillyf/datapipenodes:v1.2.3
     command: ["python3", "app/sendKittiDatasetRequestConsumer.py"]    
     depends_on: 
       - kafka
