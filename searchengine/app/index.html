@@ -9,6 +9,10 @@
     <body>
         <h1>Web Search</h1>
         <h2>Datasets</h2>
+       <h3>Import Datasets:</h3>
+        <ul>
+        <li> Kitti Raw Dataset 2011_09_26_drive_0002 (300 MB) <input class="w3-button w3-dark-grey" type="button" onclick="myUrl='https://s3.eu-central-1.amazonaws.com/avg-kitti/raw_data/2011_09_26_drive_0002/2011_09_26_drive_0002_sync.zip';fetch('/requestdatasetkitti/'+encodeURIComponent(encodeURIComponent(myUrl)));" value="Import"> </li>
+        </ul>
         <h2>Image Search</h2>
         <form method="POST">
             <input id="string">

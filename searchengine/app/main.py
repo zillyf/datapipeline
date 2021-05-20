@@ -108,7 +108,7 @@ def read_image(image_id: str):
     return FileResponse(filename)
 
 
-@app.post("/requestdatasetkitti/{KittiDatasetURL}")
+@app.get("/requestdatasetkitti/{KittiDatasetURL}")
 async def request_dataset_kitti(KittiDatasetURL: str):
     newEntry = {"KittiDatasetURL": urllib.parse.unquote(KittiDatasetURL)}
     producer.send(kafkaTopicKittiDatasetRequest, value=newEntry)
