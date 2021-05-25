@@ -32,6 +32,10 @@ directories = {}
 directories["ingest_dir"] = kittyextractdir
 directories["blobstorage_dir"] = "/data/imageblobstorage/"
 directories["thumbnail_dir"] = "/data/imagethumbnails/"
+
+metadataYoloServer = os.getenv("METADATA_YOLO", "localhost:8002")
+directories["METADATA_YOLO"]=metadataYoloServer
+
 # directories["thumbnail_dir"]=os.getenv('DATAPIPE_THUMBNAILDIR','/home/zilly/blobstoragethumbnail')
 
 
@@ -158,7 +162,7 @@ for event in consumer:
     dataset_dir = basedirectory + "/" + "/image_02/data/"
     import glob
 
-    files = glob.glob(dataset_dir + "/**/*.png", recursive=True)
+    files = sorted(glob.glob(dataset_dir + "/**/*.png", recursive=True))
 
     # sendFiles(files, basicmetadata, df_merged)
     kafkaSendFiles(

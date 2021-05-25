@@ -1,6 +1,6 @@
 FROM python:3.7
 
-RUN pip install pymongo kafka-python Pillow pandas wget
+RUN pip install pymongo kafka-python Pillow pandas wget requests
 
 EXPOSE 8000
 

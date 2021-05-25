@@ -10,7 +10,7 @@ services:
     volumes:
       - mongodb_data_container:/data/db
   searchengine:
-    image: zillyf/searchengine:v1.3.2
+    image: zillyf/searchengine:v1.3.4
     depends_on: 
       - mongodb_container
       - kafka
@@ -47,7 +47,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   datapipenodes_send_file:
-    image: zillyf/datapipenodes:v1.2.3
+    image: zillyf/datapipenodes:v1.2.7
     command: ["python3", "app/sendFilesConsumer.py"]
     depends_on: 
       - kafka
@@ -64,22 +64,29 @@ services:
       - imageblobstorage:/data/imageblobstorage
       - downloads:/data/downloads
       - extractedfiles:/data/extractedfiles
+  metadata_yolo:
+    image: zillyf/metadata:v1.1.8
+    ports:
+      - "8002:8002"
+    command: ["python3", "/usr/src/app/serveYolo.py"]
   datapipenodes_kitti_data_request:
-    image: zillyf/datapipenodes:v1.2.3
+    image: zillyf/datapipenodes:v1.2.7
     command: ["python3", "app/sendKittiDatasetRequestConsumer.py"]    
     depends_on: 
       - kafka
+      - metadata_yolo
     environment:
       KAFKA_SERVER: kafka:9093
       KAFKA_TOPIC_SENDFILES: send_file
       KAFKA_TOPIC_KITTIDATASETREQUEST: send_kitti_dataset_request
       PYTHONUNBUFFERED: 1
+      METADATA_YOLO: http://metadata_yolo:8002/uploadfile/
     volumes:
       - imagethumbnails:/data/imagethumbnails
       - imageblobstorage:/data/imageblobstorage
       - downloads:/data/downloads
       - extractedfiles:/data/extractedfiles
-                
+      
 volumes:
   mongodb_data_container:
   imagethumbnails:

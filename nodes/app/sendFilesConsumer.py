@@ -42,17 +42,6 @@ consumer = KafkaConsumer(
     value_deserializer=lambda x: loads(x.decode("utf-8")),
 )
 
-# consumer = KafkaConsumer(
-#    kafkaTopic,
-#    bootstrap_servers=[kafkaServer],
-#    auto_offset_reset='earliest',
-#    enable_auto_commit=True,
-#    group_id='my-group-id',
-#    security_protocol="PLAINTEXT",
-#    sasl_mechanism="SCRAM-SHA-256",
-#    value_deserializer=lambda x: loads(x.decode('utf-8'))
-# )
-
 print("kafka init completed")
 
 for event in consumer:
