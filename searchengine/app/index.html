@@ -1,31 +1,123 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Data Management : Image Browser</title>
+    <title>Data Pipeline : Image Browser</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+ 
         <link rel="stylesheet" href="static/w3.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    -->
         <style>
             html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
-        </style>
+            * {
+  box-sizing: border-box;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Style the header */
+header {
+  background-color: #666;
+  padding: 10px;
+  text-align: center;
+  font-size: 15px;
+  color: white;
+}
+
+/* Container for flexboxes */
+section {
+  display: -webkit-flex;
+  display: flex;
+}
+
+/* Style the navigation menu */
+nav {
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  background: #ccc;
+  padding: 20px;
+}
+
+/* Style the list inside the menu */
+nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+/* Style the content */
+article {
+  -webkit-flex: 3;
+  -ms-flex: 3;
+  flex: 3;
+  background-color: #f1f1f1;
+  padding: 10px;
+}
+
+/* Style the footer */
+footer {
+  background-color: #777;
+  padding: 10px;
+  text-align: center;
+  color: white;
+}
+
+/* Responsive layout - makes the menu and the content (inside the section) sit on top of each other instead of next to each other */
+@media (max-width: 600px) {
+  section {
+    -webkit-flex-direction: column;
+    flex-direction: column;
+  }
+}
+
+</style>
     </head>
     <body>
-        <h1>Web Search</h1>
-        <h2>Datasets</h2>
-       <h3>Import Datasets:</h3>
-        <ul>
-        <li> Kitti Raw Dataset 2011_09_28_drive_0047 (120 MB) <input class="w3-button w3-dark-grey" type="button" onclick="myUrl='https://s3.eu-central-1.amazonaws.com/avg-kitti/raw_data/2011_09_28_drive_0047/2011_09_28_drive_0047_sync.zip';fetch('/requestdatasetkitti/'+encodeURIComponent(encodeURIComponent(myUrl)));" value="Import"> </li>
-        <li> Kitti Raw Dataset 2011_09_26_drive_0002 (312 MB) <input class="w3-button w3-dark-grey" type="button" onclick="myUrl='https://s3.eu-central-1.amazonaws.com/avg-kitti/raw_data/2011_09_26_drive_0002/2011_09_26_drive_0002_sync.zip';fetch('/requestdatasetkitti/'+encodeURIComponent(encodeURIComponent(myUrl)));" value="Import"> </li>
-        </ul>
-        <h2>Image Search</h2>
-        <form method="POST">
-            <input id="string">
-            <button type="submit" class="w3-button w3-dark-grey">Search</button>
-        </form>
-        <input class="w3-button w3-dark-grey" type="button" onclick="LoadDoc()" value="Browse Images ...">
-        <input class="w3-button w3-dark-grey" type="button" onclick="myPage--; LoadDoc()" value="&larr; Previous Page">
-        <input class="w3-button w3-dark-grey" type="button" onclick="myPage++; LoadDoc()" value="Next Page &rarr;">
-        <p id="showData"></p>
-        <input class="w3-button w3-dark-grey" type="button" onclick="myPage--; LoadDoc()" value="&larr; Previous Page">
-        <input class="w3-button w3-dark-grey" type="button" onclick="myPage++; LoadDoc()" value="Next Page &rarr;">
-    
+        <header>
+            <h1>Data Pipeline</h1>
+        </header>
+        <section>
+        <nav>
+            <h2>Image Browser</h2>
+            <input class="w3-button w3-dark-grey" type="button" onclick="LoadDoc()" value="Browse Images ...">
+            <h3>Search within specific Datasets</h3>
+                <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+                <label for="vehicle1"> I have a bike</label><br>
+                <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+                <label for="vehicle2"> I have a car</label><br>
+                <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
+                <label for="vehicle3"> I have a boat</label><br><br>
+            <h3>Enter Keyword</h3>
+            <form method="POST">
+                <input id="string">
+                <button type="submit" class="w3-button w3-dark-grey">Search<i class="fa fa-search"></i></button>
+            </form>
+            <h2>Import Datasets:</h2>
+            <h4>Kitti Raw Dataset</h4>
+            <ul>
+                <li> 2011_09_28_drive_0047 (120 MB) <input class="w3-button w3-dark-grey" type="button" onclick="myUrl='https://s3.eu-central-1.amazonaws.com/avg-kitti/raw_data/2011_09_28_drive_0047/2011_09_28_drive_0047_sync.zip';fetch('/requestdatasetkitti/'+encodeURIComponent(encodeURIComponent(myUrl)));" value="Import"> </li>
+                <li> 2011_09_26_drive_0002 (312 MB) <input class="w3-button w3-dark-grey" type="button" onclick="myUrl='https://s3.eu-central-1.amazonaws.com/avg-kitti/raw_data/2011_09_26_drive_0002/2011_09_26_drive_0002_sync.zip';fetch('/requestdatasetkitti/'+encodeURIComponent(encodeURIComponent(myUrl)));" value="Import"> </li>
+            </ul>
+        <br><br><br>trest
+        </nav>
+        <article>
+            <h3>Result List</h3>
+            <input class="w3-button w3-dark-grey" type="button" onclick="myPage--; LoadDoc()" value="&larr; Previous Page">
+            <input class="w3-button w3-dark-grey" type="button" onclick="myPage++; LoadDoc()" value="Next Page &rarr;">
+            <p id="showData"></p>
+            </br></br></br></br></br></br></br></br></br></br>
+            <input class="w3-button w3-dark-grey" type="button" onclick="myPage--; LoadDoc()" value="&larr; Previous Page">
+            <input class="w3-button w3-dark-grey" type="button" onclick="myPage++; LoadDoc()" value="Next Page &rarr;">
+        </article>
+        </section>        
+        <footer>
+            This is a footer
+        </footer>
     </body>
     <script>
         var myPage = 1;
