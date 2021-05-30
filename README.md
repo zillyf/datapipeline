@@ -8,6 +8,7 @@ Clone the repository
 ```
 git clone https://github.com/zillyf/datapipeline.git
 cd datapipeline
+git checkout Datapipe_v1.7b
 sudo ./start_datapipeline
 ```
 

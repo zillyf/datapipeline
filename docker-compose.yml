@@ -10,7 +10,7 @@ services:
     volumes:
       - mongodb_data_container:/data/db
   searchengine:
-    image: zillyf/searchengine:v1.3.7
+    image: zillyf/searchengine:v1.3.8
     depends_on: 
       - mongodb_container
       - kafka
@@ -78,7 +78,7 @@ services:
     volumes: 
       - imageblobstorage:/home/jovyan/data/imageblobstorage
   datapipenodes_kitti_data_request:
-    image: zillyf/datapipenodes:v1.2.7
+    image: zillyf/datapipenodes:v1.2.8
     command: ["python3", "app/sendKittiDatasetRequestConsumer.py"]    
     depends_on: 
       - kafka
