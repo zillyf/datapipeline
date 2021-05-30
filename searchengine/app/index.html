@@ -107,25 +107,35 @@ footer {
         <nav>
             <h2>Image Browser</h2>
             <input class="w3-button w3-dark-grey" type="button" onclick="LoadDoc()" value="Browse Images ...">
-            <h3>Search within specific Datasets</h3>
-                <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-                <label for="vehicle1"> I have a bike</label><br>
+            <h3>Select Datasets</h3>
+                <p id="showDatasets" class="w3-bar-block" style="width:max-content">
+                <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" class="w3-button" on>
+                <label for="vehicle1" class="w3-button"> I have a bike</label><br>
                 <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
                 <label for="vehicle2"> I have a car</label><br>
                 <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
-                <label for="vehicle3"> I have a boat</label><br><br>
+                <label for="vehicle3"> I have a boat</label>
+                </p>
+            <h3>Select Yolo Classes</h3>
+                <p id="showYoloClasses" class="w3-bar-block" style="width:max-content">
+                <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike" class="w3-button">
+                <label for="vehicle1" class="w3-button"> I have a bike</label><br>
+                <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+                <label for="vehicle2"> I have a car</label><br>
+                <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
+                <label for="vehicle3"> I have a boat</label>
+                </p>
             <h3>Enter Keyword</h3>
             <form method="POST">
                 <input id="string">
                 <button type="submit" class="w3-button w3-dark-grey">Search<i class="fa fa-search"></i></button>
             </form>
-            <h2>Import Datasets:</h2>
+            <h2>Import Datasets</h2>
             <h4>Kitti Raw Dataset</h4>
             <ul>
                 <li> 2011_09_28_drive_0047 (120 MB) <input class="w3-button w3-dark-grey" type="button" onclick="myUrl='https://s3.eu-central-1.amazonaws.com/avg-kitti/raw_data/2011_09_28_drive_0047/2011_09_28_drive_0047_sync.zip';fetch('/requestdatasetkitti/'+encodeURIComponent(encodeURIComponent(myUrl)));" value="Import"> </li>
                 <li> 2011_09_26_drive_0002 (312 MB) <input class="w3-button w3-dark-grey" type="button" onclick="myUrl='https://s3.eu-central-1.amazonaws.com/avg-kitti/raw_data/2011_09_26_drive_0002/2011_09_26_drive_0002_sync.zip';fetch('/requestdatasetkitti/'+encodeURIComponent(encodeURIComponent(myUrl)));" value="Import"> </li>
             </ul>
-        <br><br><br>trest
         </nav>
         <article>
             <h3>Result List</h3>
@@ -143,14 +153,56 @@ footer {
     </body>
     <script>
         var myPage = 1;
-        function CreateTableFromJSON(myBooks) {
+
+        myDatasets=[
+    "2011_09_26_drive_0002_sync",
+    "2011_09_26_drive_0096_sync"
+    ]
+
+
+        function CreateItemListFromJSON(myData, elementID) {
+            
+            // CREATE DYNAMIC TABLE.
+            var list = document.createElement("p")
+            list.classList.add('w3-table'); 
+    
+            // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
+            // ADD JSON DATA TO THE TABLE AS ROWS.
+            for (var i = 0; i < myData.length; i++) {
+                var itemInput = document.createElement("input")
+                itemInput.type='checkbox'
+                itemInput.id=myData[i]
+                itemInput.checked=false
+                //itemInput.addEventListener('change',UpdateFilterSettings())
+                itemInput.onclick=function(){UpdateFilterSettings()};
+                list.insertAdjacentElement('beforeend', itemInput)
+                var itemLabel = document.createElement("label")
+                itemLabel.htmlFor=myData[i]
+                itemLabel.innerHTML=myData[i]
+                list.insertAdjacentElement('beforeend', itemLabel)
+                var itemBR = document.createElement("br")
+                list.insertAdjacentElement('beforeend', itemBR)
+            }
+            // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+            var divContainer = document.getElementById(elementID);
+            divContainer.innerHTML = "";
+            divContainer.appendChild(list);
+
+        }
+
+        //CreateItemListFromJSON(JSON.parse(myDatasets));
+        //CreateItemListFromJSON(myDatasets);
+
+
+
+
+        function CreateTableFromJSON(myData) {
             
             // EXTRACT VALUE FOR HTML HEADER. 
-            // ('Book ID', 'Book Name', 'Category' and 'Price')
             var col = [];
-            for (var i = 0; i < myBooks.length; i++) {
+            for (var i = 0; i < myData.length; i++) {
                 if (col.indexOf(key) === -1) {
-                for (var key in myBooks[i]) {
+                for (var key in myData[i]) {
                         col.push(key);
                     }
                 }
@@ -159,8 +211,6 @@ footer {
             // CREATE DYNAMIC TABLE.
             var table = document.createElement("table");
             table.classList.add('w3-table'); table.classList.add('w3-striped'); table.classList.add('w3-bordered'); table.classList.add('w3-border'); table.classList.add('w3-hoverable'); table.classList.add('w3-white');
-//            table.classList.appendChild('w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white');
-//            table.style='w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white'
     
             // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
     
@@ -181,17 +231,17 @@ footer {
             }
     
             // ADD JSON DATA TO THE TABLE AS ROWS.
-            for (var i = 0; i < myBooks.length; i++) {
+            for (var i = 0; i < myData.length; i++) {
     
                 tr = table.insertRow(-1);
     
                 for (var j = 0; j < col.length; j++) {
                     var tabCell = tr.insertCell(-1);
-                    tabCell.innerHTML = myBooks[i][col[j]];
+                    tabCell.innerHTML = myData[i][col[j]];
                 }
                 if (filenameHashIndex>0 ) {
                     var tabCell = tr.insertCell(-1);
-                    tabCell.innerHTML = '<img src=/imagethumbnail/'+myBooks[i][col[filenameHashIndex]]+'>';
+                    tabCell.innerHTML = '<img src=/imagethumbnail/'+myData[i][col[filenameHashIndex]]+'>';
                 }
 
             }
@@ -204,23 +254,49 @@ footer {
         }
         function LoadDoc() {
             var xhttp = new XMLHttpRequest();
- 
             xhttp.onreadystatechange = function() {
-                var divContainer = document.getElementById("showData");
+                //var divContainer = document.getElementById("showData");
                 if (this.readyState == 4 && this.status == 200) {
-                    myBooks = JSON.parse(this.responseText);
-                    table = CreateTableFromJSON(myBooks)
-                    // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
-//                    divContainer.innerHTML = "";
-//                    divContainer.appendChild(table);
-
+                    myData = JSON.parse(this.responseText);
+                    CreateTableFromJSON(myData)
                 }
             };           
             xhttp.open('GET', '/imagelistpage/'+myPage);
             xhttp.send();
-        
         }
-/*
+
+        function LoadDatasetList() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    myData = JSON.parse(this.responseText);
+                    CreateItemListFromJSON(myData[0], "showDatasets")
+                }
+            };           
+            xhttp.open('GET', '/distinct/datasetname');
+            xhttp.send();
+        }
+
+        function LoadYoloClassesList() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    myData = JSON.parse(this.responseText);
+                    CreateItemListFromJSON(myData[0], "showYoloClasses")
+                }
+            };           
+            xhttp.open('GET', '/distinct/yolov5name');
+            xhttp.send();
+        }
+
+        function UpdateFilterSettings(){
+            alert('changed')
+        }
+
+        //LoadDoc()
+        LoadDatasetList()
+        LoadYoloClassesList()
+        /*
         document.addEventListener('keydown', (event) => {
             var name = event.key;
             var code = event.code;

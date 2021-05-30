@@ -10,7 +10,7 @@ services:
     volumes:
       - mongodb_data_container:/data/db
   searchengine:
-    image: zillyf/searchengine:v1.3.4
+    image: zillyf/searchengine:v1.3.7
     depends_on: 
       - mongodb_container
       - kafka
@@ -69,6 +69,14 @@ services:
     ports:
       - "8002:8002"
     command: ["python3", "/usr/src/app/serveYolo.py"]
+  data_mining:
+    image: zillyf/datamining:v1.0.4
+    ports:
+      - "8890:8890"
+    depends_on: 
+      - mongodb_container
+    volumes: 
+      - imageblobstorage:/home/jovyan/data/imageblobstorage
   datapipenodes_kitti_data_request:
     image: zillyf/datapipenodes:v1.2.7
     command: ["python3", "app/sendKittiDatasetRequestConsumer.py"]    

@@ -1,22 +1,17 @@
 from typing import Optional
-
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 from fastapi.responses import FileResponse
-
 from fastapi.staticfiles import StaticFiles
-
 from pymongo import MongoClient
-
 from kafka import KafkaProducer
-
 import urllib.parse
-
 import os
 import sys
 from time import sleep
 import json
 from json import dumps
+import uvicorn
 
 app = FastAPI()
 
@@ -42,7 +37,6 @@ imgageThumbnailDir = "/data/imagethumbnails/"
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
-
 dbServer = os.getenv("MONGO_DB_SERVER", "localhost:27017")
 dbUser = os.getenv("MONGO_USERNAME", "root")
 dbPW = os.getenv("MONGO_PASSWORD", "rootpassword")
@@ -57,16 +51,12 @@ print("user:" + dbUser)
 
 collection = client.images.images
 
-
 @app.get("/", response_class=HTMLResponse)
 def read_root():
 
     f = open(appDir + "/index.html", "r")
     returnString = f.read()
     return returnString
-    # print(returnString)
-    # return {"Hello": "World"}
-
 
 @app.get("/imagelistpage/{page_id}")
 def read_imagelistpage(page_id: int):
@@ -90,21 +80,28 @@ def read_imagelistpage(page_id: int):
     ):
         data.append(image)
 
-    # f = open( appDir + '/books.json', 'r')
-    # f2 = json.load(f)
-    #    returnString = f.read()
-    #
-    returnString = json.dumps(data)
     returnString = data
-    # print(returnString);
     return returnString
 
+@app.get("/distinct/datasetname/")
+def collect_distinct_datasetname():
+    data = []
+    result=collection.distinct("datasetname")
+    data.append(result)
+    returnString = data
+    return returnString
+
+@app.get("/distinct/yolov5name/")
+def collect_distinct_yolov5name():
+    data = []
+    result=collection.distinct("yolov5.name")
+    data.append(result)
+    returnString = data
+    return returnString
 
 @app.get("/imagethumbnail/{image_id}")
 def read_image(image_id: str):
     filename = imgageThumbnailDir + image_id + ".jpg"
-    # f = open( imgageThumbnailDir + image_id+'.jpg', 'r')
-    # data = f.read()
     return FileResponse(filename)
 
 
@@ -112,9 +109,6 @@ def read_image(image_id: str):
 async def request_dataset_kitti(KittiDatasetURL: str):
     newEntry = {"KittiDatasetURL": urllib.parse.unquote(KittiDatasetURL)}
     producer.send(kafkaTopicKittiDatasetRequest, value=newEntry)
-
-
-import uvicorn
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=int(searchPort))
