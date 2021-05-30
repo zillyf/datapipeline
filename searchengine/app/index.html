@@ -154,48 +154,6 @@ footer {
     <script>
         var myPage = 1;
 
-        myDatasets=[
-    "2011_09_26_drive_0002_sync",
-    "2011_09_26_drive_0096_sync"
-    ]
-
-
-        function CreateItemListFromJSON(myData, elementID) {
-            
-            // CREATE DYNAMIC TABLE.
-            var list = document.createElement("p")
-            list.classList.add('w3-table'); 
-    
-            // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
-            // ADD JSON DATA TO THE TABLE AS ROWS.
-            for (var i = 0; i < myData.length; i++) {
-                var itemInput = document.createElement("input")
-                itemInput.type='checkbox'
-                itemInput.id=myData[i]
-                itemInput.checked=false
-                //itemInput.addEventListener('change',UpdateFilterSettings())
-                itemInput.onclick=function(){UpdateFilterSettings()};
-                list.insertAdjacentElement('beforeend', itemInput)
-                var itemLabel = document.createElement("label")
-                itemLabel.htmlFor=myData[i]
-                itemLabel.innerHTML=myData[i]
-                list.insertAdjacentElement('beforeend', itemLabel)
-                var itemBR = document.createElement("br")
-                list.insertAdjacentElement('beforeend', itemBR)
-            }
-            // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
-            var divContainer = document.getElementById(elementID);
-            divContainer.innerHTML = "";
-            divContainer.appendChild(list);
-
-        }
-
-        //CreateItemListFromJSON(JSON.parse(myDatasets));
-        //CreateItemListFromJSON(myDatasets);
-
-
-
-
         function CreateTableFromJSON(myData) {
             
             // EXTRACT VALUE FOR HTML HEADER. 
@@ -265,52 +223,68 @@ footer {
             xhttp.send();
         }
 
-        function LoadDatasetList() {
+        function LoadItemList(RestEndpoint, ListName) {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     myData = JSON.parse(this.responseText);
-                    CreateItemListFromJSON(myData[0], "showDatasets")
+                    CreateItemListFromJSON(myData[0], ListName)
                 }
             };           
-            xhttp.open('GET', '/distinct/datasetname');
+            xhttp.open('GET', RestEndpoint);
             xhttp.send();
         }
 
-        function LoadYoloClassesList() {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    myData = JSON.parse(this.responseText);
-                    CreateItemListFromJSON(myData[0], "showYoloClasses")
-                }
-            };           
-            xhttp.open('GET', '/distinct/yolov5name');
-            xhttp.send();
+        function UpdateItemList(item){
+            //alert('changed')
+            //alert(item.id)
+            elementID=item.key
+            alert(elementID)
+            var divContainer = document.getElementById(elementID).firstChild
+
+            alert(            divContainer.childNodes.length)
+            alert(divContainer.firstChild.checked)
         }
 
-        function UpdateFilterSettings(){
-            alert('changed')
+        function AddItem(list, data) {
+            var itemInput = document.createElement("input")
+                itemInput.type='checkbox'
+                itemInput.id=data
+                itemInput.key=list.key
+                itemInput.checked=false
+                //itemInput.addEventListener('change',UpdateFilterSettings())
+                itemInput.onclick=function(){UpdateItemList(this)};
+                list.insertAdjacentElement('beforeend', itemInput)
+                var itemLabel = document.createElement("label")
+                itemLabel.htmlFor=data
+                itemLabel.innerHTML=data
+                list.insertAdjacentElement('beforeend', itemLabel)
+                var itemBR = document.createElement("br")
+                list.insertAdjacentElement('beforeend', itemBR)
+        }
+
+        function CreateItemListFromJSON(myData, elementID) {
+            
+            // CREATE DYNAMIC LIST.
+            var list = document.createElement("p")
+            list.classList.add('w3-table'); 
+            list.key = elementID;
+            //AddItem(list, "")
+            for (var i = 0; i < myData.length; i++) {
+                AddItem(list, myData[i])
+            }
+            // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+            var divContainer = document.getElementById(elementID);
+            divContainer.innerHTML = "";
+            divContainer.appendChild(list);
+
         }
 
         //LoadDoc()
-        LoadDatasetList()
-        LoadYoloClassesList()
-        /*
-        document.addEventListener('keydown', (event) => {
-            var name = event.key;
-            var code = event.code;
-            if (code === '37') {
-                // Left Arrow Key
-                myPage--; LoadDoc();
-                return;
-            }
-            if (code === '39') {
-                // Right Arrow Key
-                myPage++; LoadDoc();
-                return;
-            }
-        }
-  */
+
+        LoadItemList('/distinct/datasetname', "showDatasets")
+        LoadItemList('/distinct/yolov5name', "showYoloClasses")
+
+ 
     </script>
 </html>

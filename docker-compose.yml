@@ -32,6 +32,8 @@ services:
      - "2181:2181"
   kafka:
     image: zillyf/kafka:v1
+    depends_on: 
+      - zookeeper
     ports:
       - "9092:9092"
     expose:

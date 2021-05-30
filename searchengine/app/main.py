@@ -83,6 +83,31 @@ def read_imagelistpage(page_id: int):
     returnString = data
     return returnString
 
+@app.post("/search/imagelist/{skipoffset}/{pagesize}/{datasetnames}/{yolo5classes}")
+def read_search_imagelist(skipoffset:int, pagesize:int, datasetnames:str, yolo5classes:str ):
+    data = []
+    listdatasetnames=json.loads(datasetnames)
+    listyolo5classes=json.loads(yolo5classes)
+
+    for image in (
+        collection.find(
+            {"datasetname": {"$in": listdatasetnames}, "yolov5.name": { "$in": listyolo5classes}  },
+            {
+                "datasetname" : 1,
+                "filenameHash" : 1,
+                "yolov5": 1,
+                "_id": 0,
+            },
+        )
+       .skip(skipoffset)
+       .limit(pagesize)
+    ):
+        data.append(image)
+
+    returnString = data
+    return returnString
+
+
 @app.get("/distinct/datasetname/")
 def collect_distinct_datasetname():
     data = []
