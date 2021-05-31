@@ -10,7 +10,7 @@ services:
     volumes:
       - mongodb_data_container:/data/db
   searchengine:
-    image: zillyf/searchengine:v1.3.8
+    image: zillyf/searchengine:v1.4.0
     depends_on: 
       - mongodb_container
       - kafka

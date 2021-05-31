@@ -83,19 +83,35 @@ def read_imagelistpage(page_id: int):
     returnString = data
     return returnString
 
-@app.post("/search/imagelist/{skipoffset}/{pagesize}/{datasetnames}/{yolo5classes}")
-def read_search_imagelist(skipoffset:int, pagesize:int, datasetnames:str, yolo5classes:str ):
+@app.get("/search/imagelist/{skipoffset}/{pagesize}/")
+#@app.post("/search/imagelist/{skipoffset}/{pagesize}/")
+def read_search_imagelist(skipoffset:int, pagesize:int, datasetnames:Optional[str]="[]", yolo5classes:Optional[str]="[]" ):
     data = []
+    print("datasetnames:"+datasetnames)
+    print("yolo5classes:"+yolo5classes)
     listdatasetnames=json.loads(datasetnames)
     listyolo5classes=json.loads(yolo5classes)
 
+    minLen=8
+    if (len(datasetnames)<minLen and len(yolo5classes)<minLen ):
+        searchQuery={}
+    elif (len(yolo5classes)<minLen):
+        searchQuery={"datasetname": {"$in": listdatasetnames}}
+    elif (len(datasetnames)<minLen):
+        searchQuery={"yolov5.name": {"$in": listyolo5classes}}
+    else:
+        searchQuery={"datasetname": {"$in": listdatasetnames}, "yolov5.name": { "$in": listyolo5classes}  }
+
     for image in (
         collection.find(
-            {"datasetname": {"$in": listdatasetnames}, "yolov5.name": { "$in": listyolo5classes}  },
+            searchQuery,
             {
-                "datasetname" : 1,
-                "filenameHash" : 1,
-                "yolov5": 1,
+                "datasetprovider": 1,
+                "filenameHash": 1,
+                "datasetname": 1,
+                "imageFilename": 1,
+                "timestamp": 1,
+                "yolov5.name": 1,
                 "_id": 0,
             },
         )

@@ -153,6 +153,13 @@ footer {
     </body>
     <script>
         var myPage = 1;
+        var pageSize=20;
+        var myFilters = [];
+        var defaultValue='[]'
+        var filterDatasetname=defaultValue
+        var filterYolov5name=defaultValue
+        var showPreview = true
+        var testYolo=''
 
         function CreateTableFromJSON(myData) {
             
@@ -176,13 +183,15 @@ footer {
 
             var filenameHashIndex=-1;
             filenameHashIndex=col.indexOf('filenameHash');
-    
+            var yolov5Index=-1;
+            yolov5Index=col.indexOf('yolov5');
+            
             for (var i = 0; i < col.length; i++) {
                 var th = document.createElement("th");      // TABLE HEADER.
                 th.innerHTML = col[i];
                 tr.appendChild(th);
             }
-            if (filenameHashIndex>0 ) {
+            if (showPreview && filenameHashIndex>0 ) {
                 var th = document.createElement("th");      // TABLE HEADER.
                 th.innerHTML = 'Preview Image';
                 tr.appendChild(th);
@@ -195,9 +204,20 @@ footer {
     
                 for (var j = 0; j < col.length; j++) {
                     var tabCell = tr.insertCell(-1);
-                    tabCell.innerHTML = myData[i][col[j]];
+                    if (j==yolov5Index){
+//                        tabCell.innerHTML =  decodeURIComponent(myData[i][col[j]]);
+                            testYolo=(myData[i][col[j]]);
+                            var cellValue=''
+                            for (k=0;k<testYolo.length;k++){
+                                cellValue=cellValue+testYolo[k].name+' '
+                            }
+                            tabCell.innerHTML = cellValue;
+
+                    } else {
+                        tabCell.innerHTML = myData[i][col[j]];
+                    }
                 }
-                if (filenameHashIndex>0 ) {
+                if (showPreview && filenameHashIndex>0 ) {
                     var tabCell = tr.insertCell(-1);
                     tabCell.innerHTML = '<img src=/imagethumbnail/'+myData[i][col[filenameHashIndex]]+'>';
                 }
@@ -219,11 +239,22 @@ footer {
                     CreateTableFromJSON(myData)
                 }
             };           
-            xhttp.open('GET', '/imagelistpage/'+myPage);
+//            xhttp.open('GET', '/imagelistpage/'+myPage);
+            var PostString=''
+            if (filterDatasetname==defaultValue && filterYolov5name==defaultValue)
+            {
+                PostString= '/search/imagelist/'+(myPage-1)*pageSize+'/'+pageSize+'';
+            } else {
+                PostString= '/search/imagelist/'+(myPage-1)*pageSize+'/'+pageSize+'/?datasetnames='+encodeURIComponent(filterDatasetname)+'&yolo5classes='+encodeURIComponent(filterYolov5name)+'';
+            }
+//            alert(PostString)
+            xhttp.open('GET', PostString);
             xhttp.send();
         }
 
         function LoadItemList(RestEndpoint, ListName) {
+            myFilters.push(ListName)
+            myFilters[ListName]=[]
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
@@ -235,15 +266,53 @@ footer {
             xhttp.send();
         }
 
-        function UpdateItemList(item){
-            //alert('changed')
-            //alert(item.id)
-            elementID=item.key
-            alert(elementID)
-            var divContainer = document.getElementById(elementID).firstChild
+        function UpdateFilterList(){
 
-            alert(            divContainer.childNodes.length)
-            alert(divContainer.firstChild.checked)
+            filterDatasetname='[""'
+            count=0;
+            for (var i=0;i<myFilters["showDatasets"].length;i++){
+                name=myFilters["showDatasets"][i];
+                if (myFilters["showDatasets"][name]==1){
+                    filterDatasetname+=',"'+name+'"';
+                    count++;
+                }
+            }
+            filterDatasetname+=']'
+            if (count==0){filterDatasetname=defaultValue}
+
+            count=0;
+            filterYolov5name='[""'
+            for (var i=0;i<myFilters["showYoloClasses"].length;i++){
+                name=myFilters["showYoloClasses"][i];
+                if (myFilters["showYoloClasses"][name]==1){
+                    filterYolov5name+=',"'+name+'"';
+                    count++;
+                }
+            }
+            filterYolov5name+=']'
+            if (count==0){filterYolov5name=defaultValue}
+
+            myPage=1;
+//            alert(filterDatasetname)
+//            alert(filterYolov5name)
+            LoadDoc()
+        }
+
+        function UpdateItemList(item){
+//            alert(item.checked)
+            elementID=item.key
+//            alert(elementID)
+//            alert(item.id)
+                if (item.checked==true){
+                    myFilters[elementID][item.id]=1
+                } else {
+                    myFilters[elementID][item.id]=0
+                }
+
+                UpdateFilterList();
+            // var divContainer = document.getElementById(elementID).firstChild
+            // alert(            divContainer.childNodes.length)
+            // alert(divContainer.firstChild.checked)
         }
 
         function AddItem(list, data) {
@@ -270,8 +339,11 @@ footer {
             list.classList.add('w3-table'); 
             list.key = elementID;
             //AddItem(list, "")
+            //var currentList = Array(myFilters[elementID])
             for (var i = 0; i < myData.length; i++) {
                 AddItem(list, myData[i])
+                myFilters[elementID].push(myData[i])
+                myFilters[elementID][myData[i]]=0
             }
             // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
             var divContainer = document.getElementById(elementID);
