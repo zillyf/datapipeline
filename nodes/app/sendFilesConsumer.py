@@ -9,8 +9,9 @@ import sys
 from pymongo import MongoClient
 
 # wait for startup of Kafka
-sys.stdout.write("wait for startup of Kafka\n")
-sleep(15)
+kafkaWaitTime = int(os.getenv("KAFKA_WAIT_TIME", 10))
+sys.stdout.write("Wait for startup of Kafka: "+ str(kafkaWaitTime) +" seconds\n")
+sleep(kafkaWaitTime)
 
 dbServer = os.getenv("MONGO_DB_SERVER", "localhost:27017")
 dbUser = os.getenv("MONGO_USERNAME", "searchengine")

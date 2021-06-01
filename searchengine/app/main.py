@@ -18,12 +18,11 @@ app = FastAPI()
 kafkaTopicKittiDatasetRequest = os.getenv(
     "KAFKA_TOPIC_KITTIDATASETREQUEST", "send_kitti_dataset_request"
 )
-kafkaWaitTime = int(os.getenv("KAFKA_WAIT_TIME", 10))
 kafkaServer = os.getenv("KAFKA_SERVER", "localhost:9092")
-print("kafkaTopicKittiDatasetRequest: " + kafkaTopicKittiDatasetRequest)
 
 # wait for startup of Kafka
-sys.stdout.write("Kitti Dataset Request: wait for startup of Kafka\n")
+kafkaWaitTime = int(os.getenv("KAFKA_WAIT_TIME", 10))
+sys.stdout.write("Wait for startup of Kafka: "+ str(kafkaWaitTime) +" seconds\n")
 sleep(kafkaWaitTime)
 
 producer = KafkaProducer(

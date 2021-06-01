@@ -20,8 +20,10 @@ kafkaTopicKittiDatasetRequest = os.getenv(
 )
 
 # wait for startup of Kafka
-sys.stdout.write("Kitti Dataset Request: wait for startup of Kafka\n")
-sleep(5)
+kafkaWaitTime = int(os.getenv("KAFKA_WAIT_TIME", 10))
+sys.stdout.write("Wait for startup of Kafka: "+ str(kafkaWaitTime) +" seconds\n")
+sleep(kafkaWaitTime)
+
 
 kafkaServer = os.getenv("KAFKA_SERVER", "localhost:9092")
 

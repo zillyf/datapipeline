@@ -10,7 +10,7 @@ services:
     volumes:
       - mongodb_data_container:/data/db
   searchengine:
-    image: zillyf/searchengine:v1.4.0
+    image: zillyf/searchengine:v1.4.1
     depends_on: 
       - mongodb_container
       - kafka
@@ -49,7 +49,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   datapipenodes_send_file:
-    image: zillyf/datapipenodes:v1.2.7
+    image: zillyf/datapipenodes:v1.2.8
     command: ["python3", "app/sendFilesConsumer.py"]
     depends_on: 
       - kafka
@@ -60,6 +60,7 @@ services:
       MONGO_DB_SERVER: mongodb_container:27017
       KAFKA_SERVER: kafka:9093
       KAFKA_TOPIC_SENDFILES: send_file
+      KAFKA_WAIT_TIME: 20
       PYTHONUNBUFFERED: 1
     volumes:
       - imagethumbnails:/data/imagethumbnails
@@ -89,6 +90,7 @@ services:
       KAFKA_SERVER: kafka:9093
       KAFKA_TOPIC_SENDFILES: send_file
       KAFKA_TOPIC_KITTIDATASETREQUEST: send_kitti_dataset_request
+      KAFKA_WAIT_TIME: 20
       PYTHONUNBUFFERED: 1
       METADATA_YOLO: http://metadata_yolo:8002/uploadfile/
     volumes:
