@@ -73,7 +73,7 @@ services:
       - "8002:8002"
     command: ["python3", "/usr/src/app/serveYolo.py"]
   data_mining:
-    image: zillyf/datamining:v1.0.4
+    image: zillyf/datamining:v1.0.8
     ports:
       - "8890:8890"
     depends_on: 
