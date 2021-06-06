@@ -32,7 +32,8 @@ producer = KafkaProducer(
 curDir = os.getcwd()
 appDir = curDir + "/app"
 blobDir = ""
-imgageThumbnailDir = "/data/imagethumbnails/"
+imageThumbnailDir = "/data/imagethumbnails/"
+imageBlobStorageDir = "/data/imageblobstorage/"
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
@@ -141,9 +142,13 @@ def collect_distinct_yolov5name():
 
 @app.get("/imagethumbnail/{image_id}")
 def read_image(image_id: str):
-    filename = imgageThumbnailDir + image_id + ".jpg"
+    filename = imageThumbnailDir + image_id + ".jpg"
     return FileResponse(filename)
 
+@app.get("/imageblobstorage/{image_id}")
+def read_image(image_id: str):
+    filename = imageBlobStorageDir + image_id + ".png"
+    return FileResponse(filename)
 
 @app.get("/requestdatasetkitti/{KittiDatasetURL}")
 async def request_dataset_kitti(KittiDatasetURL: str):
