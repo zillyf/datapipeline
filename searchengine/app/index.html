@@ -136,6 +136,21 @@ footer {
                 <li> 2011_09_28_drive_0047 (120 MB) <input class="w3-button w3-dark-grey" type="button" onclick="myUrl='https://s3.eu-central-1.amazonaws.com/avg-kitti/raw_data/2011_09_28_drive_0047/2011_09_28_drive_0047_sync.zip';fetch('/requestdatasetkitti/'+encodeURIComponent(encodeURIComponent(myUrl)));" value="Import"> </li>
                 <li> 2011_09_26_drive_0002 (312 MB) <input class="w3-button w3-dark-grey" type="button" onclick="myUrl='https://s3.eu-central-1.amazonaws.com/avg-kitti/raw_data/2011_09_26_drive_0002/2011_09_26_drive_0002_sync.zip';fetch('/requestdatasetkitti/'+encodeURIComponent(encodeURIComponent(myUrl)));" value="Import"> </li>
             </ul>
+            <h2>Data Mining</h2>
+            <h4>Jupyter Notebooks</h4>
+            <ul>
+                <li><a href="/tree/notebooks/" onmouseover="javascript:event.target.port=8890" target="jupyter">Jupyter Notebooks</a></li>
+                <li><a href="/notebooks/notebooks/importKittiDatasetUI.ipynb" onmouseover="javascript:event.target.port=8890" target="jupyter">Import Datasets</a></li>
+                <li><a href="/notebooks/notebooks/mongoDB_client.ipynb" onmouseover="javascript:event.target.port=8890" target="jupyter">MongoDB Search Queries</a></li>
+            </ul>
+            <h4>Yolo v5 RestAPI</h4>
+            <ul>
+                <li><a href="/docs/" onmouseover="javascript:event.target.port=8002" target='yolo'>Yolo API Docs</a></li>
+            </ul>
+            <h4>Clip RestAPI</h4>
+            <ul>
+                <li><a href="/docs/" onmouseover="javascript:event.target.port=8003" target='clip'>Clip API Docs</a></li>
+            </ul>
         </nav>
         <article>
             <h3>Result List</h3>

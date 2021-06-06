@@ -10,7 +10,7 @@ services:
     volumes:
       - mongodb_data_container:/data/db
   searchengine:
-    image: zillyf/searchengine:v1.4.2
+    image: zillyf/searchengine:${TAG_SEARCHENGINE}
     depends_on: 
       - mongodb_container
       - kafka
@@ -31,7 +31,7 @@ services:
     ports:
      - "2181:2181"
   kafka:
-    image: zillyf/kafka:v1
+    image: zillyf/kafka:${TAG_KAFKA}
     depends_on: 
       - zookeeper
     ports:
@@ -49,7 +49,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
   datapipenodes_send_file:
-    image: zillyf/datapipenodes:v1.2.8
+    image: zillyf/datapipenodes:${TAG_DATAPIPENODES}
     command: ["python3", "app/sendFilesConsumer.py"]
     depends_on: 
       - kafka
@@ -68,7 +68,7 @@ services:
       - downloads:/data/downloads
       - extractedfiles:/data/extractedfiles
   metadata_yolo:
-    image: zillyf/metadata:v1.1.8
+    image: zillyf/metadata:${TAG_METADATA_YOLO}
     ports:
       - "8002:8002"
     command: ["python3", "/usr/src/app/serveYolo.py"]
@@ -78,7 +78,7 @@ services:
       - "8003:8003"
     command: ["python3", "/usr/src/app/serveClip.py"]
   data_mining:
-    image: zillyf/datamining:v1.0.8
+    image: zillyf/datamining:${TAG_DATA_MINING}
     ports:
       - "8890:8890"
     depends_on: 
@@ -86,7 +86,7 @@ services:
     volumes: 
       - imageblobstorage:/home/jovyan/data/imageblobstorage
   datapipenodes_kitti_data_request:
-    image: zillyf/datapipenodes:v1.2.8
+    image: zillyf/datapipenodes:${TAG_DATAPIPENODES}
     command: ["python3", "app/sendKittiDatasetRequestConsumer.py"]    
     depends_on: 
       - kafka

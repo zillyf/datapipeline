@@ -1,5 +1,18 @@
 #!/bin/bash
 
+# Data Pipeline : Update to Latest Version
+echo ..................
+echo Data Pipeline : Update to Latest Version
+echo ..................
+source .env
+echo TAG_KAFKA=${TAG_KAFKA}
+echo TAG_SEARCHENGINE=${TAG_SEARCHENGINE}
+echo TAG_DATAPIPENODES=${TAG_DATAPIPENODES}
+echo TAG_METADATA_YOLO=${TAG_METADATA_YOLO}
+echo TAG_METADATA_CLIP=${TAG_METADATA_CLIP}
+echo TAG_DATA_MINING=${TAG_DATA_MINING}
+
+
 # Update to latest version
 git pull
 
@@ -19,7 +32,7 @@ else
     git clone https://github.com/wurstmeister/kafka-docker.git 
     cd  kafka-docker
 fi
-docker build -t zillyf/kafka:v1 .
+docker build -t zillyf/kafka:${TAG_KAFKA} .
 cd ..
 cd ..
 
@@ -28,7 +41,7 @@ echo ..................
 echo Search Engine Docker
 echo ..................
 cd searchengine
-docker build -t zillyf/searchengine:v1.4.2 .
+docker build -t zillyf/searchengine:${TAG_SEARCHENGINE} .
 cd ..
 
 # Build Datapipe Nodes Docker
@@ -36,7 +49,7 @@ echo ..................
 echo Build Datapipe Node Docker
 echo ..................
 cd nodes
-docker build -t zillyf/datapipenodes:v1.2.8 .
+docker build -t zillyf/datapipenodes:${TAG_DATAPIPENODES} .
 cd ..
 
 # Build Data Mining Docker
@@ -44,7 +57,7 @@ echo ..................
 echo Build Data Mining Docker
 echo ..................
 cd datamining
-docker build -t zillyf/datamining:v1.0.8 .
+docker build -t zillyf/datamining:${TAG_DATA_MINING} .
 cd ..
 
 # Build Metadata Yolov5
@@ -52,7 +65,7 @@ echo ..................
 echo Build Metadata Yolov5 Docker
 echo ..................
 cd metadataextraction/yolov5
-docker build -t zillyf/metadata:v1.1.8 .
+docker build -t zillyf/metadata:${TAG_METADATA_YOLO} .
 cd ../..
 
 # Build Metadata Clip
@@ -60,6 +73,6 @@ echo ..................
 echo Build Metadata Clip Docker
 echo ..................
 cd metadataextraction/clip
-docker build -t zillyf/clip-base:v1.0.9 .
+docker build -t zillyf/clip-base:${TAG_METADATA_CLIP} .
 cd ../..
 
