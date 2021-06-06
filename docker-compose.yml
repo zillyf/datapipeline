@@ -72,6 +72,11 @@ services:
     ports:
       - "8002:8002"
     command: ["python3", "/usr/src/app/serveYolo.py"]
+  metadata_clip:
+    image: zillyf/clip-base:v1.0.9
+    ports:
+      - "8003:8003"
+    command: ["python3", "/usr/src/app/serveClip.py"]
   data_mining:
     image: zillyf/datamining:v1.0.8
     ports:

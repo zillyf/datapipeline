@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Update to latest version
+git pull
+
+# Build Kafka Docker
+echo ..................
+echo Build Kafka Docker
+echo ..................
+mkdir kafka
+cd kafka
+if [ -d "kafka-docker" ] 
+then
+    echo "kafka-docker already cloned. Calling git pull to get latest version"
+    cd  kafka-docker
+    git pull
+else
+    echo "kafka-docker not yet cloned."
+    git clone https://github.com/wurstmeister/kafka-docker.git 
+    cd  kafka-docker
+fi
+docker build -t zillyf/kafka:v1 .
+cd ..
+cd ..
+
+# Build Search Engine Docker
+echo ..................
+echo Search Engine Docker
+echo ..................
+cd searchengine
+docker build -t zillyf/searchengine:v1.4.2 .
+cd ..
+
+# Build Datapipe Nodes Docker
+echo ..................
+echo Build Datapipe Node Docker
+echo ..................
+cd nodes
+docker build -t zillyf/datapipenodes:v1.2.8 .
+cd ..
+
+# Build Data Mining Docker
+echo ..................
+echo Build Data Mining Docker
+echo ..................
+cd datamining
+docker build -t zillyf/datamining:v1.0.8 .
+cd ..
+
+# Build Metadata Yolov5
+echo ..................
+echo Build Metadata Yolov5 Docker
+echo ..................
+cd metadataextraction/yolov5
+docker build -t zillyf/metadata:v1.1.8 .
+cd ../..
+
+# Build Metadata Clip
+echo ..................
+echo Build Metadata Clip Docker
+echo ..................
+cd metadataextraction/clip
+docker build -t zillyf/clip-base:v1.0.9 .
+cd ../..
+

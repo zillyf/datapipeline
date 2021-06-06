@@ -28,6 +28,14 @@ async def create_upload_file(file: UploadFile = File(...)):
     #results = model(img, size=640)  # reduce size=320 for faster inference
     #return results.pandas().xyxy[0].to_json(orient="records")
 
+@app.get("/uploadtext/{ClipSearchString}")
+async def create_upload_text(ClipSearchString: str):
+    text = clip.tokenize([ClipSearchString]).to(device)
+    with torch.no_grad():
+        text_features = model.encode_text(text)
+
+    return text_features.numpy().tolist()
+
 if __name__ == "__main__":
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model, preprocess = clip.load("ViT-B/32", device=device)

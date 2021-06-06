@@ -2,8 +2,33 @@
 
 # convenience script if yo want to get started with changing code, running it separately
 
+# Install Docker
+# install docker first
+sudo apt-get update
+
+
+sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+
 #docker pull mongo
 pip3 install pymongo
 pip3 install fastapi
 pip3 install uvicorn
 pip3 install kafka-python
+pip3 install pymilvus==1.1.0
+
+mkdir -p /home/$USER/milvus/conf
+cd /home/$USER/milvus/conf
+wget https://raw.githubusercontent.com/milvus-io/milvus/v1.1.0/core/conf/demo/server_config.yaml
+sudo docker pull milvusdb/milvus:1.1.0-cpu-d050721-5e559c
+
