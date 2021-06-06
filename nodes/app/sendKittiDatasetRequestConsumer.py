@@ -14,6 +14,8 @@ import hashlib
 import wget
 import zipfile
 import pandas as pd
+from pathlib import Path
+
 
 kafkaTopicKittiDatasetRequest = os.getenv(
     "KAFKA_TOPIC_KITTIDATASETREQUEST", "send_kitti_dataset_request"
@@ -124,10 +126,21 @@ for event in consumer:
     (datasetname, fileextension) = os.path.splitext(filename)
     zipfilename = downloaddir + filename
 
-    a = wget.download(KittiDatasetURL, zipfilename)
 
-    zf = zipfile.ZipFile(zipfilename, "r")
-    zf.extractall(kittyextractdir + datasetname)
+    filecheck=Path(zipfilename)
+    if filecheck.is_file:
+        print('Skip! Using previously downloaded file: '+zipfilename)
+    else:
+        print('Downloading file: '+zipfilename)
+        a = wget.download(KittiDatasetURL, zipfilename)
+
+    filecheck=Path(kittyextractdir + datasetname)
+    if filecheck.is_file:
+        print('Skip! Using previously extracted file: '+kittyextractdir + datasetname)
+    else:
+        print('Extracting file: '+kittyextractdir + datasetname)
+        zf = zipfile.ZipFile(zipfilename, "r")
+        zf.extractall(kittyextractdir + datasetname)
 
     daydir = datasetname[0:10]
     # two strings can easily be concatinated using '+' operator

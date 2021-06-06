@@ -48,7 +48,7 @@ print("kafka init completed")
 for event in consumer:
     event_data = event.value
     # Do whatever you want
-    print(event_data)
+    print('New Kafka Message Arrived on Topic: '+kafkaTopic)
     # collection.insert_one(  event_data )
     if "filenameHash" in event_data:
         key = {"filenameHash": event_data["filenameHash"]}
