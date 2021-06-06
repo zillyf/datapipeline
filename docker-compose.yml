@@ -99,6 +99,7 @@ services:
       KAFKA_WAIT_TIME: 20
       PYTHONUNBUFFERED: 1
       METADATA_YOLO: http://metadata_yolo:8002/uploadfile/
+      METADATA_CLIP: http://metadata_clip:8003/uploadfile/
     volumes:
       - imagethumbnails:/data/imagethumbnails
       - imageblobstorage:/data/imageblobstorage

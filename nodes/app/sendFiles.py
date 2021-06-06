@@ -14,6 +14,7 @@ def kafkaSendFiles(
     thumbnail_dir = directories["thumbnail_dir"]
     ingest_dir = directories["ingest_dir"]
     metadataYoloServer=directories["METADATA_YOLO"]
+    metadataClipServer=directories["METADATA_CLIP"]
 
     j = -1
     for filename in files:
@@ -29,7 +30,10 @@ def kafkaSendFiles(
         filenameHash = file_hash.hexdigest()
         f.close()
         files={'file': open(filenameOS, 'rb')}
-        response = requests.post(metadataYoloServer, files=files).json()
+        yolo_response = requests.post(metadataYoloServer, files=files).json()
+        files={'file': open(filenameOS, 'rb')}
+        clip_response = requests.post(metadataClipServer, files=files).json()
+
         image = Image.open(filenameOS).convert("RGB")
         width, height = image.size
         max_w = 400
@@ -45,7 +49,8 @@ def kafkaSendFiles(
         relPath = relPath.replace("\\", "/")
         (basedir, name) = os.path.split(relPath)
         newEntry = {
-            "yolov5": json.loads(response),
+            "yolov5": json.loads(yolo_response),
+            "clip": json.loads( json.dumps(clip_response), parse_float=lambda x: round(float(x), 4) ),
             "datasetprovider": basicmetadata["datasetprovider"],
             "datasetproviderURL": basicmetadata["datasetproviderURL"],
             "datasetname": basicmetadata["datasetname"],

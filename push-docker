@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# Data Pipeline : Push Docker Images of Latest Version
+echo ..................
+echo Data Pipeline : Push Docker Images of Latest Version
+echo ..................
+source .env
+
+echo ..................
+echo Dolcker Login
+echo ..................
+
+docker login
+
+# Push Kafka Docker
+echo ..................
+echo Push Kafka Docker
+echo ..................
+echo TAG_KAFKA=${TAG_KAFKA}
+docker push zillyf/kafka:${TAG_KAFKA}
+
+# Push Search Engine Docker
+echo ..................
+echo Push Search Engine Docker
+echo ..................
+echo TAG_SEARCHENGINE=${TAG_SEARCHENGINE}
+docker push zillyf/searchengine:${TAG_SEARCHENGINE}
+
+# Push Datapipe Node Docker
+echo ..................
+echo Push Datapipe Node Docker
+echo ..................
+echo TAG_DATAPIPENODES=${TAG_DATAPIPENODES}
+docker push zillyf/datapipenodes:${TAG_DATAPIPENODES}
+
+# Push Data Mining Docker
+echo ..................
+echo Push Data Mining Docker
+echo ..................
+echo TAG_DATA_MINING=${TAG_DATA_MINING}
+docker push zillyf/datamining:${TAG_DATA_MINING}
+
+# Push Metadata Yolov5 Docker
+echo ..................
+echo Push Metadata Yolov5 Docker
+echo ..................
+echo TAG_METADATA_YOLO=${TAG_METADATA_YOLO}
+docker push zillyf/metadata:${TAG_METADATA_YOLO}
+
+# Push Metadata Clip Docker
+echo ..................
+echo Push Metadata Clip Docker
+echo ..................
+echo TAG_METADATA_CLIP=${TAG_METADATA_CLIP}
+docker push zillyf/clip-base:${TAG_METADATA_CLIP}

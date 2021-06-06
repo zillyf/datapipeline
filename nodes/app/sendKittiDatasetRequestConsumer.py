@@ -38,6 +38,9 @@ directories["thumbnail_dir"] = "/data/imagethumbnails/"
 metadataYoloServer = os.getenv("METADATA_YOLO", "localhost:8002")
 directories["METADATA_YOLO"]=metadataYoloServer
 
+metadataClipServer = os.getenv("METADATA_CLIP", "localhost:8003")
+directories["METADATA_CLIP"]=metadataClipServer
+
 # directories["thumbnail_dir"]=os.getenv('DATAPIPE_THUMBNAILDIR','/home/zilly/blobstoragethumbnail')
 
 
