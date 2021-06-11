@@ -130,18 +130,18 @@ for event in consumer:
     filecheck=Path(zipfilename)
     allow_skip = False
     if allow_skip==True:
-        print('Skipping NOT allowed')
-    else:
         print('Skipping allowed')
+    else:
+        print('Skipping Not allowed')
 
-    if filecheck.is_file & allow_skip==True:
+    if filecheck.is_file and allow_skip==True:
         print('Skip! Using previously downloaded file: '+zipfilename)
     else:
         print('Downloading file: '+zipfilename)
         a = wget.download(KittiDatasetURL, zipfilename)
 
     filecheck=Path(kittyextractdir + datasetname)
-    if filecheck.is_file & allow_skip==True:
+    if filecheck.is_file and allow_skip==True:
         print('Skip! Using previously extracted file: '+kittyextractdir + datasetname)
     else:
         print('Extracting file: '+kittyextractdir + datasetname)
