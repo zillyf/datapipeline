@@ -18,12 +18,12 @@ services:
       MONGO_USERNAME: root
       MONGO_PASSWORD: rootpassword
       MONGO_DB_SERVER: mongodb_container:27017
-      SEARCHENGINE_PORT: 8000
+      SEARCHENGINE_PORT: ${PORT_SEARCHENGINE}
       KAFKA_WAIT_TIME: 20
       KAFKA_SERVER: kafka:9093
       KAFKA_TOPIC_KITTIDATASETREQUEST: send_kitti_dataset_request
     ports:
-      - 8000:8000
+      - ${PORT_SEARCHENGINE}:${PORT_SEARCHENGINE}
     volumes:
       - imagethumbnails:/data/imagethumbnails
       - imageblobstorage:/data/imageblobstorage

@@ -8,10 +8,27 @@ Clone the repository
 ```
 git clone https://github.com/zillyf/datapipeline.git
 cd datapipeline
+```
+
+If you have a fresh ubuntu installation, install docker & docker-compose
+
+```
+sudo ./install_dependencies
+```
+
+You can now build the required docker images
+
+```
+sudo ./build_datapipeline
+```
+
+Now, start the datapipeline
+
+```
 sudo ./start_datapipeline
 ```
 
-Open http://localhost:8000
+Open http://localhost (or the URL of your server)
 
 To stop the data pipeline (from inside ```datapipeline``` directory)
 ```
